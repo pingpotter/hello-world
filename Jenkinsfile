@@ -22,9 +22,6 @@ pipeline {
     
     environment {
         GIT_CREDS = credentials('git.ping')
-        DOCKER_CREDS = credentials('dockerhub-official')
-        // REGITTRY_NAME is repo on docker hub
-        REGITTRY_NAME = "tncbs/billpayment-management"
     }
     
     stages {
@@ -33,7 +30,7 @@ pipeline {
                 script{
                     // Tag version when merged to master branch
                     def rootDir = pwd()
-                    def getVersion = load "${rootDir}/_dev/version.groovy"
+                    def getVersion = load "${rootDir}/version.groovy"
                     env['APP_VERSION'] = getVersion.getCurrent()
                     env['GIT_TAG'] = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | sed -e 's/v//g'").trim()
                 }
@@ -43,23 +40,7 @@ pipeline {
                 echo "Git version is ${env.GIT_TAG}"
                 //stash name: "deployments", includes: "_dev/deployments/*"
             }
-        }
-        stage('Unit Test'){
-            steps {
-                    sh 'go test ./... -count=1 -coverprofile "coverage.out"'
-                    sh 'go tool cover -html="coverage.out" -o "coverage.html"'
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: pwd(), reportFiles: 'coverage.html', reportName: 'Coverage Report', reportTitles: ''])
-                    sh 'rm coverage.out coverage.html'
-                
-            }
-        }
-        stage('Go Build'){
-            steps {
-                    sh 'GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -o app "cmd/main.go"'
-                    sh 'rm app'
-            }
-        }
- 
+        } 
     }
     
     post{
