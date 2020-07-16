@@ -12,7 +12,7 @@ categories:
       - 'bug'
   - title: '🧰 Maintenance'
     label: 'chore'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER) $BODY'
 version-resolver:
   major:
     labels:
@@ -26,8 +26,6 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## Changes
+  ## What’s Changed
 
   $CHANGES
-  
-  $CONTRIBUTORS
