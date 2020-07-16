@@ -12,7 +12,9 @@ categories:
       - 'bug'
   - title: '🧰 Maintenance'
     label: 'chore'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER) $BODY'
+change-template: |
+  - $TITLE @$AUTHOR (#$NUMBER) 
+    $BODY
 version-resolver:
   major:
     labels:
