@@ -1,0 +1,22 @@
+name: Pull Request Comment Branch
+
+on:
+  issue_comment:
+    types: created
+
+jobs:
+  pr-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v2
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.ref }}
+
+      - run: git rev-parse --abbrev-ref HEAD
+      - run: git rev-parse --verify HEAD
