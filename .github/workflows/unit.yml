@@ -1,0 +1,39 @@
+---
+name: unit-test
+
+on: [push]
+
+jobs:
+
+  verify:
+    name: Verify Test , Build , Linter
+    runs-on: tnsmith/yottadb-golang:go1.14.6-release3.0
+#     container: tnsmith/yottadb-golang:go1.14.6-release3.0
+    steps:
+
+    - name: Initial
+      run: |
+        go env
+        go version
+
+    - uses: actions/checkout@v2
+
+    - run: mkdir -p path/to/artifact
+
+    - name: Test
+      run: |
+        . /ydbdir/ydbenv
+        go test -mod=vendor -coverprofile=cover.out ./... -p 1
+        export GOFLAGS="-mod=vendor"
+        go tool cover -html=cover.out -o path/to/artifact/cover.html
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: cover-report
+        path: path/to/artifact
+
+    - name: Build
+      run: go build -mod=vendor -v ./...
+
+    - name: Linter
+      run: golangci-lint run ./... --modules-download-mode=vendor --disable-all --enable=misspell --enable=gosec --tests=false
