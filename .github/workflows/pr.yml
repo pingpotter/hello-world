@@ -1,0 +1,41 @@
+name: Create Pull Request
+on:
+  release:
+    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+    types: [published]
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Make changes to pull request
+        run: date +%s > report.txt
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: Update report
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: master
+          title: '[Bot] develop to master auto PR'
+          body: |
+            robot: Automated PR from **develop** to **master**
+          labels: |
+            automated pr
+          # assignees: peter-evans
+          reviewers: pingpotter
+          # team-reviewers: |
+          #   owners
+          #   maintainers
+          # milestone: 1
+          draft: false
+
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
