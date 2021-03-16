@@ -1,8 +1,9 @@
 name: Create Pull Request
 on:
-  push:
-    tags:
-    - v*
+  release:
+    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+    types: [published]
+    
 jobs:
   createPullRequest:
     runs-on: ubuntu-latest
