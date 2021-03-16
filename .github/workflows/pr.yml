@@ -21,7 +21,8 @@ jobs:
           commit-message: Update report
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          branch: master
+          base: master
+          branch: develop
           title: '[Bot] develop to master auto PR'
           body: |
             robot: Automated PR from **develop** to **master**
