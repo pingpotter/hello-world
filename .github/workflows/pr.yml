@@ -2,8 +2,7 @@ name: Create Pull Request
 on:
   push:
     tags:
-    - *
-
+    - v*
 jobs:
   createPullRequest:
     runs-on: ubuntu-latest
